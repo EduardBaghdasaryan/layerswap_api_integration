@@ -6,148 +6,292 @@
 	},
 	"item": [
 		{
-			"name": "get sources and destinations",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "accept",
-						"value": "application/json"
+			"name": "prod",
+			"item": [
+				{
+					"name": "get sources and destinations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-LS-APIKEY",
+								"value": "{{API_KEY}}",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{PROD_HOST}}/api/public/networks",
+							"host": [
+								"{{PROD_HOST}}"
+							],
+							"path": [
+								"api",
+								"public",
+								"networks"
+							]
+						}
 					},
-					{
-						"key": "X-LS-APIKEY",
-						"value": "{{API_KEY}}",
-						"type": "default",
-						"disabled": true
-					}
-				],
-				"url": {
-					"raw": "{{PROD_HOST}}/api/public/networks",
-					"host": [
-						"{{PROD_HOST}}"
-					],
-					"path": [
-						"api",
-						"public",
-						"networks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get quote",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "accept",
-						"value": "application/json"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"source\": \"SOLANA_MAINNET\",\n  \"destination\": \"ETHEREUM_MAINNET\",\n  \"asset\": \"USDT\",\n  \"refuel\": true\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{PROD_HOST}}/api/public/quote",
-					"host": [
-						"{{PROD_HOST}}"
-					],
-					"path": [
-						"api",
-						"public",
-						"quote"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "create swap",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "X-LS-APIKEY",
-						"value": "{{API_KEY}}"
+				{
+					"name": "get quote",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"source\": \"SOLANA_MAINNET\",\n  \"destination\": \"ETHEREUM_MAINNET\",\n  \"asset\": \"USDT\",\n  \"refuel\": true\n}"
+						},
+						"url": {
+							"raw": "{{PROD_HOST}}/api/public/quote",
+							"host": [
+								"{{PROD_HOST}}"
+							],
+							"path": [
+								"api",
+								"public",
+								"quote"
+							]
+						}
 					},
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"source\": \"ETHEREUM_MAINNET\",\n    \"destination\": \"ZKSYNCERA_MAINNET\",\n    \"amount\": 0.01,\n    \"asset\": \"ETH\",\n    \"source_address\": \"0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990\",\n    \"destination_address\": \"0xe688b84b23f322a994A53dbF8E15FA82CDB71127\",\n    \"refuel\": false,\n    \"reference_id\": \"144546\"\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{PROD_HOST}}/api/private/swaps",
-					"host": [
-						"{{PROD_HOST}}"
-					],
-					"path": [
-						"api",
-						"private",
-						"swaps"
-					]
+				{
+					"name": "create swap",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-LS-APIKEY",
+								"value": "{{API_KEY}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"source\": \"ETHEREUM_MAINNET\",\n    \"destination\": \"ZKSYNCERA_MAINNET\",\n    \"amount\": 0.01,\n    \"asset\": \"ETH\",\n    \"source_address\": \"0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990\",\n    \"destination_address\": \"0xe688b84b23f322a994A53dbF8E15FA82CDB71127\",\n    \"refuel\": false,\n    \"reference_id\": \"144546\"\n}"
+						},
+						"url": {
+							"raw": "{{PROD_HOST}}/api/private/swaps",
+							"host": [
+								"{{PROD_HOST}}"
+							],
+							"path": [
+								"api",
+								"private",
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get swap",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-LS-APIKEY",
+								"value": "{{API_KEY}}"
+							}
+						],
+						"url": {
+							"raw": "{{PROD_HOST}}/api/private/swaps/ad94ccfd-09b0-4c01-aae3-632a7f3011d2",
+							"host": [
+								"{{PROD_HOST}}"
+							],
+							"path": [
+								"api",
+								"private",
+								"swaps",
+								"ad94ccfd-09b0-4c01-aae3-632a7f3011d2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancel swap",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-LS-APIKEY",
+								"value": "{{API_KEY}}"
+							}
+						],
+						"url": {
+							"raw": "{{PROD_HOST}}/api/private/swaps/ad94ccfd-09b0-4c01-aae3-632a7f3011d2",
+							"host": [
+								"{{PROD_HOST}}"
+							],
+							"path": [
+								"api",
+								"private",
+								"swaps",
+								"ad94ccfd-09b0-4c01-aae3-632a7f3011d2"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "get swap",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "X-LS-APIKEY",
-						"value": "{{API_KEY}}"
-					}
-				],
-				"url": {
-					"raw": "{{PROD_HOST}}/api/private/swaps/ad94ccfd-09b0-4c01-aae3-632a7f3011d2",
-					"host": [
-						"{{PROD_HOST}}"
-					],
-					"path": [
-						"api",
-						"private",
-						"swaps",
-						"ad94ccfd-09b0-4c01-aae3-632a7f3011d2"
-					]
+			"name": "local",
+			"item": [
+				{
+					"name": "get sources and destinations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-LS-APIKEY",
+								"value": "{{API_KEY}}",
+								"type": "default",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{LOCAL_HOST}}/networks",
+							"host": [
+								"{{LOCAL_HOST}}"
+							],
+							"path": [
+								"networks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get quote",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"source\": \"SOLANA_MAINNET\",\n  \"destination\": \"ETHEREUM_MAINNET\",\n  \"asset\": \"USDT\",\n  \"refuel\": true\n}"
+						},
+						"url": {
+							"raw": "{{LOCAL_HOST}}/quote",
+							"host": [
+								"{{LOCAL_HOST}}"
+							],
+							"path": [
+								"quote"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create swap",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-LS-APIKEY",
+								"value": "{{API_KEY}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"source\": \"ETHEREUM_MAINNET\",\n    \"destination\": \"ZKSYNCERA_MAINNET\",\n    \"amount\": 0.01,\n    \"asset\": \"ETH\",\n    \"sourceAddress\": \"0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990\",\n    \"destinationAddress\": \"0xe688b84b23f322a994A53dbF8E15FA82CDB71127\",\n    \"refuel\": false,\n    \"referenceId\": \"145126\"\n}"
+						},
+						"url": {
+							"raw": "{{LOCAL_HOST}}/swaps",
+							"host": [
+								"{{LOCAL_HOST}}"
+							],
+							"path": [
+								"swaps"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get swap",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-LS-APIKEY",
+								"value": "{{API_KEY}}"
+							}
+						],
+						"url": {
+							"raw": "{{LOCAL_HOST}}/swaps/6019d056-76dd-4ea3-86e8-92a52a7ebd71",
+							"host": [
+								"{{LOCAL_HOST}}"
+							],
+							"path": [
+								"swaps",
+								"6019d056-76dd-4ea3-86e8-92a52a7ebd71"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancel swap",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-LS-APIKEY",
+								"value": "{{API_KEY}}"
+							}
+						],
+						"url": {
+							"raw": "{{LOCAL_HOST}}/swaps/6019d056-76dd-4ea3-86e8-92a52a7ebd71",
+							"host": [
+								"{{LOCAL_HOST}}"
+							],
+							"path": [
+								"swaps",
+								"6019d056-76dd-4ea3-86e8-92a52a7ebd71"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "cancel swap",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "X-LS-APIKEY",
-						"value": "{{API_KEY}}"
-					}
-				],
-				"url": {
-					"raw": "{{PROD_HOST}}/api/private/swaps/ad94ccfd-09b0-4c01-aae3-632a7f3011d2",
-					"host": [
-						"{{PROD_HOST}}"
-					],
-					"path": [
-						"api",
-						"private",
-						"swaps",
-						"ad94ccfd-09b0-4c01-aae3-632a7f3011d2"
-					]
-				}
-			},
-			"response": []
+			]
 		}
 	],
 	"event": [
@@ -179,6 +323,11 @@
 		{
 			"key": "PROD_HOST",
 			"value": "https://partner-api.layerswap.io",
+			"type": "default"
+		},
+		{
+			"key": "LOCAL_HOST",
+			"value": "http://localhost:3000",
 			"type": "default"
 		}
 	]
