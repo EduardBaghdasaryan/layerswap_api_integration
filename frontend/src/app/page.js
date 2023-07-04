@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import {
   Button,
   FormControl,
@@ -16,6 +17,8 @@ export default function Home() {
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("");
   const [address, setAddress] = useState("");
+  const [sources, setSources] = useState([]);
+  const [destinations, setDestinations] = useState([]);
 
   const handleSourceChange = (event) => {
     setSource(event.target.value);
@@ -42,6 +45,25 @@ export default function Home() {
     // Perform form submission logic here
     console.log("Form submitted!");
   };
+
+  useEffect(() => {
+    axios.get('https://partner-api.layerswap.io/api/public/networks').then((response) => {
+      const data = response.data;
+      if (response.data) {
+        if (response.data.error) {
+          console.log("error getting netowrks", response.data.error)
+        } else {
+          setSources(response.data.data.sources);
+          setDestinations(response.data.data.destinations);
+        }
+      }
+    });
+  
+    return () => {
+      // TODO
+    }
+  }, [])
+  
   return (
     <Grid
       container
@@ -51,7 +73,6 @@ export default function Home() {
       justifyContent="center"
       sx={{ minHeight: "100vh" }}
     >
-      {" "}
       <Grid item xs={3}>
         <form onSubmit={handleSubmit}>
           <Grid container direction={"column"} spacing={2}>
@@ -65,25 +86,29 @@ export default function Home() {
                   label="Source"
                   onChange={handleSourceChange}
                 >
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  {sources.map(({ logo, display_name, name }, index) => (
+                    <MenuItem key={index} value={name}>
+                      {display_name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
             <Grid item>
               <FormControl fullWidth>
                 <InputLabel id="destination-label">Destination</InputLabel>
-                <Select
-                  labelId="destination-label"
-                  id="destination"
-                  value={destination}
-                  label="Destination"
-                  onChange={handleDestinationChange}
-                >
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  <Select
+                    labelId="destination-label"
+                    id="destination"
+                    value={destination}
+                    label="Destination"
+                    onChange={handleDestinationChange}
+                  >
+                  {destinations.map(({ logo, display_name, name }, index) => (
+                    <MenuItem key={index} value={name}>
+                      {display_name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
