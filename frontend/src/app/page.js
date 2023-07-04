@@ -20,6 +20,7 @@ export default function Home() {
   const [sources, setSources] = useState([]);
   const [destinations, setDestinations] = useState([]);
   const [currencies, setCurrencies] = useState([]);
+  const [quote, setQuote] = useState({})
 
   const updateCurrencies = (src, dest) => {
     let currencies = []
@@ -43,36 +44,84 @@ export default function Home() {
     }
   }
 
+  const getQuote = async () => {
+    try {
+      const body = {
+        source,
+        destination,
+        asset: currency,
+        refuel: true
+      };
+      const response = await axios.post('http://localhost:3000/quote', body);
+      setQuote(response.data.data)
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
   const handleSourceChange = (event) => {
     updateCurrencies(event.target.value, destination);
     setSource(event.target.value);
+    if (source && destination && currency) {
+      getQuote()
+    }
   };
 
   const handleDestinationChange = (event) => {
     updateCurrencies(source, event.target.value);
     setDestination(event.target.value);
+    if (source && destination && currency) {
+      getQuote()
+    }
   };
 
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
   };
 
+  const showMin = () => {
+    setAmount(quote.min_amount)
+  }
+
+  const showMax = () => {
+    setAmount(quote.max_amount)
+  }
+
   const handleCurrencyChange = (event) => {
     setCurrency(event.target.value);
+    if (source && destination && currency) {
+      getQuote()
+    }
   };
 
   const handleAddressChange = (event) => {
     setAddress(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Perform form submission logic here
+    console.log(amount);
+    try {
+      const body = {
+        source,
+        destination,
+        amount,
+        sourceAddress : address,
+        destinationAddress : '0xe688b84b23f322a994A53dbF8E15FA82CDB71127',
+        asset: currency,
+        refuel: false,
+        referenceId : "145127"
+      };
+      const response = await axios.post('http://localhost:3000/swaps', body);
+      console.log(response.data.data);
+    } catch (error) {
+      console.log(error.response.data);
+    }
     console.log("Form submitted!");
   };
 
   useEffect(() => {
-    axios.get('https://partner-api.layerswap.io/api/public/networks').then((response) => {
+    axios.get('http://localhost:3000/networks').then((response) => {
       if (response.data) {
         if (response.data.error) {
           console.log("error getting netowrks", response.data.error)
@@ -141,6 +190,7 @@ export default function Home() {
                 label="Amount"
                 value={amount}
                 onChange={handleAmountChange}
+                placeholder={quote.min_amount + "-" +  quote.max_amount} 
               />
               <Select
                 id="currency-select"
@@ -154,6 +204,32 @@ export default function Home() {
                   </MenuItem>
                 ))}
               </Select>
+            </Grid>
+            <Grid item>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={showMin}
+              >
+                min
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={showMax}
+              >
+                max
+              </Button>
+              {quote.min_amount && quote.max_amount && (
+                <p style={{ margin: "0 2px" }}>
+                  Range: {quote.min_amount} - {quote.max_amount}
+                </p>
+              )}
+            </div>
+            {quote.fee_amount && <p>Fee: {quote.fee_amount}</p>}
             </Grid>
             <Grid item>
               <TextField
@@ -170,7 +246,7 @@ export default function Home() {
                 color="primary"
                 type="submit"
               >
-                Submit
+                Swap
               </Button>
             </Grid>
           </Grid>
