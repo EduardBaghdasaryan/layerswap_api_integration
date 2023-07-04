@@ -19,12 +19,37 @@ export default function Home() {
   const [address, setAddress] = useState("");
   const [sources, setSources] = useState([]);
   const [destinations, setDestinations] = useState([]);
+  const [currencies, setCurrencies] = useState([]);
+
+  const updateCurrencies = (src, dest) => {
+    let currencies = []
+    addCurrencies(src, sources, currencies);
+    addCurrencies(dest, destinations, currencies);
+    setCurrencies(currencies);
+  }
+
+  const addCurrencies = (filterBy, data, currencies) => {
+    if (filterBy) {
+      const foundData = data.find(source => source.name === filterBy);
+      if (foundData) {
+        foundData.networks.forEach(network => {
+          network.currencies.findIndex(currency => {
+            if (currencies.findIndex(item => item.name === currency.name) === -1) {
+              currencies.push(currency);
+            }
+          });
+        });
+      }
+    }
+  }
 
   const handleSourceChange = (event) => {
+    updateCurrencies(event.target.value, destination);
     setSource(event.target.value);
   };
 
   const handleDestinationChange = (event) => {
+    updateCurrencies(source, event.target.value);
     setDestination(event.target.value);
   };
 
@@ -48,7 +73,6 @@ export default function Home() {
 
   useEffect(() => {
     axios.get('https://partner-api.layerswap.io/api/public/networks').then((response) => {
-      const data = response.data;
       if (response.data) {
         if (response.data.error) {
           console.log("error getting netowrks", response.data.error)
@@ -124,9 +148,11 @@ export default function Home() {
                 value={currency}
                 onChange={handleCurrencyChange}
               >
-                <MenuItem value={10}>USDT</MenuItem>
-                <MenuItem value={20}>ETH</MenuItem>
-                <MenuItem value={30}>BTC</MenuItem>
+               {currencies.map(({ logo, display_name, name }, index) => (
+                  <MenuItem key={index} value={name}>
+                    {display_name}
+                  </MenuItem>
+                ))}
               </Select>
             </Grid>
             <Grid item>
