@@ -12,7 +12,7 @@ import {
 
 import { useCurrencies, useNetworks, useQuote, useSwaps } from "./hooks";
 
-export default function Home() {
+export default function App() {
   const { sources, destinations } = useNetworks();
   const { quote, getQuote } = useQuote();
   const { swap, createSwap, getSwap } = useSwaps();

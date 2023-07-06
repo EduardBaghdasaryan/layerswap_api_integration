@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API_URL = "http://localhost:3000";
+
 const useNetworks = () => {
   const [sources, setSources] = useState([]);
   const [destinations, setDestinations] = useState([]);
@@ -9,7 +11,7 @@ const useNetworks = () => {
     const fetchData = async () => {
       try {
         const { data: response } = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/networks`
+          `${API_URL}/networks`
         );
         if (response.error) {
           console.log("error getting networks", response.error);
@@ -36,7 +38,7 @@ const useQuote = async () => {
   const getQuote = async (body) => {
     try {
       const { data: response } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/quote`,
+        `${API_URL}/quote`,
         body
       );
       if (response.error) {
@@ -56,10 +58,10 @@ const useQuote = async () => {
 
 const useSwaps = async () => {
   const [swap, setSwap] = useState({});
-  const createSwap = async () => {
+  const createSwap = async (body) => {
     try {
       const { data: response } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/swaps`,
+        `${API_URL}/swaps`,
         body
       );
 
@@ -75,9 +77,7 @@ const useSwaps = async () => {
 
   const getSwap = async (id) => {
     const { data: response } = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/swaps/${id}`,
-      body
-    );
+      `${API_URL}/swaps/${id}`);
 
     if (response.error) {
       console.log("error creating swap", response.error);
