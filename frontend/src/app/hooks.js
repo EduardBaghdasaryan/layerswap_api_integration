@@ -93,4 +93,39 @@ const useSwaps = async () => {
   };
 };
 
-export { useNetworks, useQuote, useSwaps };
+const useCurrencies = () => {
+  const [currencies, setCurrencies] = useState([]);
+
+  const updateCurrencies = ({
+    sourceFilterBy, destFilterBy, sources, destinations
+  }) => {
+    const sourceCurrencies = getCurrencies(sourceFilterBy, sources);
+    const destCurrencies = getCurrencies(destFilterBy, destinations);
+    const intersectCurrencies = sourceCurrencies.filter(n => destCurrencies.some(n2 => n.name === n2.name));
+    setCurrencies(intersectCurrencies);
+  };
+
+  const getCurrencies = (filterBy, data) => {
+    const currencies = [];
+    if (filterBy) {
+      const foundData = data.find((source) => source.name === filterBy);
+      if (foundData) {
+        foundData.networks.forEach(network => {
+          network.currencies.findIndex(currency => {
+            if (currencies.findIndex(item => item.name === currency.name) === -1) {
+              currencies.push(currency);
+            }
+          });
+        });
+      }
+    }
+    return currencies;
+  };
+
+  return {
+    currencies,
+    updateCurrencies,
+  };
+};
+
+export { useNetworks, useQuote, useSwaps, useCurrencies };

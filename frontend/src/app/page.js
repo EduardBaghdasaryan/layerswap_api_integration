@@ -10,44 +10,27 @@ import {
   Grid,
 } from "@mui/material";
 
-import { useNetworks, useQuote, useSwaps } from "./hooks";
+import { useCurrencies, useNetworks, useQuote, useSwaps } from "./hooks";
 
 export default function Home() {
   const { sources, destinations } = useNetworks();
   const { quote, getQuote } = useQuote();
   const { swap, createSwap, getSwap } = useSwaps();
+  const { currencies, updateCurrencies } = useCurrencies();
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("");
   const [address, setAddress] = useState("");
-  const [currencies, setCurrencies] = useState([]);
 
-  const updateCurrencies = (src, dest) => {
-    let currencies = [];
-    addCurrencies(src, sources, currencies);
-    addCurrencies(dest, destinations, currencies);
-    setCurrencies(currencies);
-  };
-
-  const addCurrencies = (filterBy, data, currencies) => {
-    if (filterBy) {
-      const foundData = data.find((source) => source.name === filterBy);
-      if (foundData) {
-        // TODO: This is wrong. We need intersection of two arrays
-        // foundData.networks.forEach(network => {
-        //   network.currencies.findIndex(currency => {
-        //     if (currencies.findIndex(item => item.name === currency.name) === -1) {
-        //       currencies.push(currency);
-        //     }
-        //   });
-        // });
-      }
-    }
-  };
 
   const handleSourceChange = (event) => {
-    updateCurrencies(event.target.value, destination);
+    updateCurrencies({
+      sourceFilterBy: event.target.value,
+      destFilterBy: destination,
+      sources,
+      destinations
+    });
     setSource(event.target.value);
     if (source && destination && currency) {
       getQuote({
@@ -60,7 +43,12 @@ export default function Home() {
   };
 
   const handleDestinationChange = (event) => {
-    updateCurrencies(source, event.target.value);
+    updateCurrencies({
+      sourceFilterBy: source,
+      destFilterBy: event.target.value,
+      sources,
+      destinations
+    });
     setDestination(event.target.value);
     if (source && destination && currency) {
       getQuote({
