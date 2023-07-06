@@ -85,7 +85,6 @@ const useGetSwap = () => {
         } else {
           console.log("ressponse", response.data);
           setSwap(response.data);
-          return response.data;
         }
       } catch (error) {
         console.log("error getting networks", error);

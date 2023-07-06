@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import App from "./App.js";
-import Swap from "./Swap.js";
+import Swap from "./Swap";
 import SwapList from "./SwapList";
 
 const router = createBrowserRouter([
