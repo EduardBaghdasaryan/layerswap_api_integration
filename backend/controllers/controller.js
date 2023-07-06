@@ -1,6 +1,7 @@
 import axios from "axios";
 import { prodHost, apiKey } from "../env.dev.js";
 import { Swaps } from "../model.js";
+import { Webhook } from "svix";
 
 const getNetworks = async (req, res) => {
   try {
@@ -140,4 +141,21 @@ const deleteSwap = async (req, res) => {
   }
 };
 
-export { getNetworks, getQuote, createSwap, getSwaps, getSwap, deleteSwap };
+const webhook = async (req, res) => {
+  const payload = req.body;
+  const headers = req.headers;
+
+  const wh = new Webhook(secret);
+  let msg;
+  try {
+      msg = wh.verify(payload, headers);
+  } catch (err) {
+      res.status(400).json({});
+  }
+  console.log(msg);
+  // Do something with the message...
+
+  res.json({});
+};
+
+export { getNetworks, getQuote, createSwap, getSwaps, getSwap, deleteSwap, webhook };

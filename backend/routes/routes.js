@@ -6,6 +6,7 @@ import {
   getSwaps,
   getSwap,
   deleteSwap,
+  webhook
 } from "../controllers/controller.js";
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.get("/swaps", getSwaps);
 router.post("/swaps", createSwap);
 router.get("/swaps/:id", getSwap);
 router.delete("/swaps/:id", deleteSwap);
+router.post("/webhook", webhook);
 
 export default router;
