@@ -1,4 +1,6 @@
+import { useCallback } from "react";
 import { useSwaps } from "./hooks";
+import { useNavigate } from "react-router-dom";
 import {
   Grid,
   Table,
@@ -9,8 +11,15 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
+
 export default function Swaps() {
   const { swaps } = useSwaps();
+
+  const navigate = useNavigate();
+
+  const setSelectedRow = useCallback(({ id }) => {
+    navigate(id);
+  }, [navigate]);
   return (
     <>
       <Grid
@@ -41,6 +50,7 @@ export default function Swaps() {
                     (row) =>
                       row.id && (
                         <TableRow
+                          onClick={() => setSelectedRow(row)}
                           key={row.id}
                           sx={{
                             "&:last-child td, &:last-child th": { border: 0 },
