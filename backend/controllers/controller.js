@@ -1,5 +1,5 @@
 import axios from "axios";
-import { prodHost, apiKey } from "../env.dev.js";
+import { prodHost, apiKey, webhookSecret } from "../env.dev.js";
 import { Swaps } from "../model.js";
 import { Webhook } from "svix";
 
@@ -145,7 +145,7 @@ const webhook = async (req, res) => {
   const payload = req.body;
   const headers = req.headers;
 
-  const wh = new Webhook(secret);
+  const wh = new Webhook(webhookSecret);
   let msg;
   try {
       msg = wh.verify(payload, headers);

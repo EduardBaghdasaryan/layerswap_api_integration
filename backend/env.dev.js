@@ -14,5 +14,6 @@ const port = getEnvVariable("PORT");
 const allowedOrigin = getEnvVariable("ALLOWED_ORIGIN");
 const apiKey = getEnvVariable("API_KEY");
 const prodHost = getEnvVariable("PROD_HOST");
+const webhookSecret = getEnvVariable("WEBHOOK_SECRET");
 
-export { port, allowedOrigin, apiKey, prodHost };
+export { port, allowedOrigin, apiKey, prodHost, webhookSecret };
