@@ -10,9 +10,7 @@ const useNetworks = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: response } = await axios.get(
-          `${API_URL}/networks`
-        );
+        const { data: response } = await axios.get(`${API_URL}/networks`);
         if (response.error) {
           console.log("error getting networks", response.error);
         } else {
@@ -33,14 +31,11 @@ const useNetworks = () => {
   };
 };
 
-const useQuote = async () => {
+const useQuote = () => {
   const [quote, setQuote] = useState({});
   const getQuote = async (body) => {
     try {
-      const { data: response } = await axios.post(
-        `${API_URL}/quote`,
-        body
-      );
+      const { data: response } = await axios.post(`${API_URL}/quote`, body);
       if (response.error) {
         console.log("error getting quote", response.error);
       } else {
@@ -56,14 +51,11 @@ const useQuote = async () => {
   };
 };
 
-const useSwaps = async () => {
+const useSwaps = () => {
   const [swap, setSwap] = useState({});
   const createSwap = async (body) => {
     try {
-      const { data: response } = await axios.post(
-        `${API_URL}/swaps`,
-        body
-      );
+      const { data: response } = await axios.post(`${API_URL}/swaps`, body);
 
       if (response.error) {
         console.log("error creating swap", response.error);
@@ -76,8 +68,7 @@ const useSwaps = async () => {
   };
 
   const getSwap = async (id) => {
-    const { data: response } = await axios.get(
-      `${API_URL}/swaps/${id}`);
+    const { data: response } = await axios.get(`${API_URL}/swaps/${id}`);
 
     if (response.error) {
       console.log("error creating swap", response.error);
@@ -97,11 +88,16 @@ const useCurrencies = () => {
   const [currencies, setCurrencies] = useState([]);
 
   const updateCurrencies = ({
-    sourceFilterBy, destFilterBy, sources, destinations
+    sourceFilterBy,
+    destFilterBy,
+    sources,
+    destinations,
   }) => {
     const sourceCurrencies = getCurrencies(sourceFilterBy, sources);
     const destCurrencies = getCurrencies(destFilterBy, destinations);
-    const intersectCurrencies = sourceCurrencies.filter(n => destCurrencies.some(n2 => n.name === n2.name));
+    const intersectCurrencies = sourceCurrencies.filter((n) =>
+      destCurrencies.some((n2) => n.name === n2.name)
+    );
     setCurrencies(intersectCurrencies);
   };
 
@@ -110,9 +106,11 @@ const useCurrencies = () => {
     if (filterBy) {
       const foundData = data.find((source) => source.name === filterBy);
       if (foundData) {
-        foundData.networks.forEach(network => {
-          network.currencies.findIndex(currency => {
-            if (currencies.findIndex(item => item.name === currency.name) === -1) {
+        foundData.networks.forEach((network) => {
+          network.currencies.findIndex((currency) => {
+            if (
+              currencies.findIndex((item) => item.name === currency.name) === -1
+            ) {
               currencies.push(currency);
             }
           });
