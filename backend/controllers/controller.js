@@ -52,7 +52,7 @@ const createSwap = async (req, res) => {
     referenceId,
   } = req.body;
   try {
-    const response = await axios.post(
+    let response = await axios.post(
       `${prodHost}/api/private/swaps`,
       {
         source,
@@ -75,8 +75,16 @@ const createSwap = async (req, res) => {
       await Swaps.create({
         swapId: response.data.data.swap_id,
       });
+      const result = await axios.get(
+        `${prodHost}/api/private/swaps/${response.data.data.swap_id}`,
+        {
+          headers: {
+            "X-LS-APIKEY": apiKey,
+          },
+        }
+      );
+      res.json(result.data);
     }
-    res.json(response.data);
   } catch (error) {
     res.status(error.response.status).json({ error: error.response.data });
   }
@@ -85,8 +93,8 @@ const createSwap = async (req, res) => {
 const getSwaps = async (req, res) => {
   try {
     const swaps = await Swaps.findAll({
-        attributes: ['swapId'],
-        raw: true,
+      attributes: ["swapId"],
+      raw: true,
     });
     console.log(swaps);
     // TODO: interate through swaps and call getSwap for each swapId

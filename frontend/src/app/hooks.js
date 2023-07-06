@@ -54,7 +54,7 @@ const useQuote = async () => {
   };
 };
 
-const useCreateSwap = async () => {
+const useSwaps = async () => {
   const [swap, setSwap] = useState({});
   const createSwap = async () => {
     try {
@@ -72,10 +72,25 @@ const useCreateSwap = async () => {
       console.log("error creating swap", error);
     }
   };
+
+  const getSwap = async (id) => {
+    const { data: response } = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_URL}/swaps/${id}`,
+      body
+    );
+
+    if (response.error) {
+      console.log("error creating swap", response.error);
+    } else {
+      setSwap(response.data);
+    }
+  };
+
   return {
     swap,
     createSwap,
+    getSwap,
   };
 };
 
-export { useNetworks, useQuote, useCreateSwap };
+export { useNetworks, useQuote, useSwaps };
