@@ -2,9 +2,9 @@ import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import App from "./App.js";
-import Swap from "./Swap.js";
-import SwapList from "./SwapList";
+import App from "./App";
+import Swap from "./Swap";
+import Swaps from "./Swaps";
 
 const router = createBrowserRouter([
   {
@@ -16,8 +16,8 @@ const router = createBrowserRouter([
     element: <Swap />,
   },
   {
-    path: "/swaplist",
-    element: <SwapList />,
+    path: "/swaps",
+    element: <Swaps />,
   },
 ]);
 

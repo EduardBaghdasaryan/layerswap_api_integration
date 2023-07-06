@@ -106,7 +106,7 @@ const getSwaps = async (req, res) => {
         });
       })
     );
-    swaps = responses.map(({ data }) => data);
+    swaps = responses.map(({ data }) => data.data || data.error);
     res.json(swaps);
   } catch (error) {
     res.status(500).json({ error: error.response.data });
@@ -144,7 +144,7 @@ const deleteSwap = async (req, res) => {
 const webhook = async (req, res) => {
   const payload = req.body;
   const headers = req.headers;
-
+  console.log(payload)
   const wh = new Webhook(webhookSecret);
   let msg;
   try {
