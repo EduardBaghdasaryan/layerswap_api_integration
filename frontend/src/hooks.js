@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const API_URL = "http://localhost:3000";
 
@@ -51,8 +52,7 @@ const useQuote = () => {
   };
 };
 
-const useSwaps = () => {
-  const [swap, setSwap] = useState({});
+const useCreateSwap = () => {
   const createSwap = async (body) => {
     try {
       const { data: response } = await axios.post(`${API_URL}/swaps`, body);
@@ -60,27 +60,43 @@ const useSwaps = () => {
       if (response.error) {
         console.log("error creating swap", response.error);
       } else {
-        setSwap(response.data);
+        return response.data;
       }
     } catch (error) {
       console.log("error creating swap", error);
     }
   };
 
-  const getSwap = async (id) => {
-    const { data: response } = await axios.get(`${API_URL}/swaps/${id}`);
-
-    if (response.error) {
-      console.log("error creating swap", response.error);
-    } else {
-      setSwap(response.data);
-    }
+  return {
+    createSwap,
   };
+};
+
+const useGetSwap = () => {
+  const [swap, setSwap] = useState({});
+  const { id } = useParams();
+
+  useEffect(() => {
+    const getSwap = async () => {
+      try {
+        const { data: response } = await axios.get(`${API_URL}/swaps/${id}`);
+        if (response.error) {
+          console.log("error getting networks", response.error);
+        } else {
+          console.log("ressponse", response.data);
+          setSwap(response.data);
+          return response.data;
+        }
+      } catch (error) {
+        console.log("error getting networks", error);
+      }
+    };
+
+    getSwap();
+  }, []);
 
   return {
     swap,
-    createSwap,
-    getSwap,
   };
 };
 
@@ -126,4 +142,4 @@ const useCurrencies = () => {
   };
 };
 
-export { useNetworks, useQuote, useSwaps, useCurrencies };
+export { useNetworks, useQuote, useCreateSwap, useCurrencies, useGetSwap };
