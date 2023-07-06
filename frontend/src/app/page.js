@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Button,
   FormControl,
@@ -11,17 +11,27 @@ import {
   Grid,
 } from "@mui/material";
 
+import {useNetworks, useQuote, useCreateSwap } from './hooks';
 
 export default function Home() {
+  const {
+    sources,
+    destinations,
+  } = useNetworks();
+  const {
+    quote,
+    getQuote,
+  } = useQuote();
+  const {
+    swap,
+    createSwap,
+  } = useCreateSwap();
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("");
   const [address, setAddress] = useState("");
-  const [sources, setSources] = useState([]);
-  const [destinations, setDestinations] = useState([]);
   const [currencies, setCurrencies] = useState([]);
-  const [quote, setQuote] = useState({})
 
   const updateCurrencies = (src, dest) => {
     let currencies = []
@@ -46,27 +56,16 @@ export default function Home() {
     }
   }
 
-  const getQuote = async () => {
-    try {
-      const body = {
-        source,
-        destination,
-        asset: currency,
-        refuel: true
-      };
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/quote`, body);
-      // TODO: Log also error case
-      setQuote(response.data.data)
-    } catch (error) {
-      console.log(error.response.data);
-    }
-  };
-
   const handleSourceChange = (event) => {
     updateCurrencies(event.target.value, destination);
     setSource(event.target.value);
     if (source && destination && currency) {
-      getQuote()
+      getQuote({
+        source,
+        destination,
+        asset: currency,
+        refuel: true,
+      })
     }
   };
 
@@ -74,7 +73,12 @@ export default function Home() {
     updateCurrencies(source, event.target.value);
     setDestination(event.target.value);
     if (source && destination && currency) {
-      getQuote()
+      getQuote({
+        source,
+        destination,
+        asset: currency,
+        refuel: true,
+      })
     }
   };
 
@@ -93,7 +97,12 @@ export default function Home() {
   const handleCurrencyChange = (event) => {
     setCurrency(event.target.value);
     if (source && destination && currency) {
-      getQuote()
+      getQuote({
+        source,
+        destination,
+        asset: currency,
+        refuel: true,
+      })
     }
   };
 
@@ -102,44 +111,18 @@ export default function Home() {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log(amount);
-    try {
-      const body = {
-        source,
-        destination,
-        amount,
-        sourceAddress : address,
-        destinationAddress : '0xe688b84b23f322a994A53dbF8E15FA82CDB71127',
-        asset: currency,
-        refuel: false,
-        referenceId : "145127"
-      };
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/swaps`, body);
-      console.log(response.data.data); // TODO: Log also error case
-    } catch (error) {
-      console.log(error.response.data);
-    }
+    createSwap({
+      source,
+      destination,
+      amount,
+      sourceAddress : address,
+      destinationAddress : '0xe688b84b23f322a994A53dbF8E15FA82CDB71127',
+      asset: currency,
+      refuel: false,
+      referenceId : "145127"
+    });
     console.log("Form submitted!");
   };
-
-  useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/networks`).then((response) => { // TODO: Convert to async/await
-      if (response.data) {
-        if (response.data.error) {
-          console.log("error getting netowrks", response.data.error)
-        } else {
-          setSources(response.data.data.sources);
-          setDestinations(response.data.data.destinations);
-        }
-      }
-    });
-  
-    return () => {
-      // TODO
-    }
-  }, [])
-  
   return (
     <Grid
       container
@@ -193,7 +176,7 @@ export default function Home() {
                 label="Amount"
                 value={amount}
                 onChange={handleAmountChange}
-                placeholder={quote.min_amount + "-" +  quote.max_amount} 
+                placeholder={quote?.min_amount + "-" +  quote?.max_amount} 
               />
               <Select
                 id="currency-select"
@@ -226,13 +209,13 @@ export default function Home() {
               >
                 max
               </Button>
-              {quote.min_amount && quote.max_amount && (
+              {quote?.min_amount && quote?.max_amount && (
                 <p style={{ margin: "0 2px" }}>
                   Range: {quote.min_amount} - {quote.max_amount}
                 </p>
               )}
             </div>
-            {quote.fee_amount && <p>Fee: {quote.fee_amount}</p>}
+            {quote?.fee_amount && <p>Fee: {quote.fee_amount}</p>}
             </Grid>
             <Grid item>
               <TextField
