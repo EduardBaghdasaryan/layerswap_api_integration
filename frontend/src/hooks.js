@@ -83,7 +83,6 @@ const useGetSwap = () => {
         if (response.error) {
           console.log("error getting networks", response.error);
         } else {
-          console.log("ressponse", response.data);
           setSwap(response.data);
         }
       } catch (error) {
@@ -92,10 +91,31 @@ const useGetSwap = () => {
     };
 
     getSwap();
-  }, []);
+  }, [id]);
 
   return {
     swap,
+  };
+};
+
+const useSwaps = () => {
+  const [swaps, setSwaps] = useState([]);
+
+  useEffect(() => {
+    const getSwaps = async () => {
+      try {
+        const { data: response } = await axios.get(`${API_URL}/swaps`);
+        setSwaps(response);
+      } catch (error) {
+        console.log("error getting networks", error);
+      }
+    };
+
+    getSwaps();
+  }, []);
+
+  return {
+    swaps,
   };
 };
 
@@ -141,4 +161,4 @@ const useCurrencies = () => {
   };
 };
 
-export { useNetworks, useQuote, useCreateSwap, useCurrencies, useGetSwap };
+export { useNetworks, useQuote, useCreateSwap, useCurrencies, useGetSwap, useSwaps };
