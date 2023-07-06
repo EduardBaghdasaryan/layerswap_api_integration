@@ -11,6 +11,7 @@ import {
   Grid,
 } from "@mui/material";
 
+
 export default function Home() {
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
@@ -33,13 +34,14 @@ export default function Home() {
     if (filterBy) {
       const foundData = data.find(source => source.name === filterBy);
       if (foundData) {
-        foundData.networks.forEach(network => {
-          network.currencies.findIndex(currency => {
-            if (currencies.findIndex(item => item.name === currency.name) === -1) {
-              currencies.push(currency);
-            }
-          });
-        });
+        // TODO: This is wrong. We need intersection of two arrays
+        // foundData.networks.forEach(network => {
+        //   network.currencies.findIndex(currency => {
+        //     if (currencies.findIndex(item => item.name === currency.name) === -1) {
+        //       currencies.push(currency);
+        //     }
+        //   });
+        // });
       }
     }
   }
@@ -52,7 +54,8 @@ export default function Home() {
         asset: currency,
         refuel: true
       };
-      const response = await axios.post('http://localhost:3000/quote', body);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/quote`, body);
+      // TODO: Log also error case
       setQuote(response.data.data)
     } catch (error) {
       console.log(error.response.data);
@@ -112,8 +115,8 @@ export default function Home() {
         refuel: false,
         referenceId : "145127"
       };
-      const response = await axios.post('http://localhost:3000/swaps', body);
-      console.log(response.data.data);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/swaps`, body);
+      console.log(response.data.data); // TODO: Log also error case
     } catch (error) {
       console.log(error.response.data);
     }
@@ -121,7 +124,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:3000/networks').then((response) => {
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/networks`).then((response) => { // TODO: Convert to async/await
       if (response.data) {
         if (response.data.error) {
           console.log("error getting netowrks", response.data.error)
