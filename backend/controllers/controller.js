@@ -84,20 +84,21 @@ const createSwap = async (req, res) => {
 
 const getSwaps = async (req, res) => {
   try {
-    const swaps = await Swaps.findAll({
+    let swaps = await Swaps.findAll({
         attributes: ['swapId'],
         raw: true,
     });
-    console.log(swaps);
-    // TODO: interate through swaps and call getSwap for each swapId
-    // const response = await axios.get(`${prodHost}/api/private/swaps/${id}`, {
-    //   headers: {
-    //     "X-LS-APIKEY": apiKey,
-    //   },
-    // });
-    res.json(swapsModel);
+    const responses = await Promise.all(swaps.map(({ swapId }) => {
+      return axios.get(`${prodHost}/api/private/swaps/${swapId}`, {
+          headers: {
+            "X-LS-APIKEY": apiKey,
+          },
+        });
+    }));
+    swaps = responses.map(({ data }) => data);
+    res.json(swaps);
   } catch (error) {
-    res.status(error.response.status).json({ error: error.response.data });
+    res.status(500).json({ error: error.response.data });
   }
 };
 
