@@ -23,18 +23,17 @@ export default function App() {
   const [currency, setCurrency] = useState("");
   const [address, setAddress] = useState("");
 
-
   const handleSourceChange = (event) => {
     updateCurrencies({
       sourceFilterBy: event.target.value,
       destFilterBy: destination,
       sources,
-      destinations
+      destinations,
     });
     setSource(event.target.value);
-    if (source && destination && currency) {
+    if (event.target.value && destination && currency) {
       getQuote({
-        source,
+        source: event.target.value,
         destination,
         asset: currency,
         refuel: true,
@@ -47,13 +46,13 @@ export default function App() {
       sourceFilterBy: source,
       destFilterBy: event.target.value,
       sources,
-      destinations
+      destinations,
     });
     setDestination(event.target.value);
-    if (source && destination && currency) {
+    if (source && event.target.value && currency) {
       getQuote({
         source,
-        destination,
+        destination: event.target.value,
         asset: currency,
         refuel: true,
       });
@@ -65,20 +64,20 @@ export default function App() {
   };
 
   const showMin = () => {
-    setAmount(quote.min_amount);
+    setAmount(quote?.min_amount || 0);
   };
 
   const showMax = () => {
-    setAmount(quote.max_amount);
+    setAmount(quote?.max_amount || 0);
   };
 
   const handleCurrencyChange = (event) => {
     setCurrency(event.target.value);
-    if (source && destination && currency) {
+    if (source && destination && event.target.value) {
       getQuote({
         source,
         destination,
-        asset: currency,
+        asset: event.target.value,
         refuel: true,
       });
     }
