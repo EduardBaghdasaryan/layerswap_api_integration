@@ -150,7 +150,7 @@ const webhook = async (req, res) => {
   try {
       msg = wh.verify(payload, headers);
   } catch (err) {
-      res.status(400).json({});
+      return res.status(400).json({});
   }
   console.log(msg);
   // Do something with the message...
