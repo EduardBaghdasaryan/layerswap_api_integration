@@ -123,7 +123,7 @@ const getSwap = async (req, res) => {
     });
     res.json(response.data);
   } catch (error) {
-    res.status(error.response.status).json({ error: error.response.data });
+    res.status(500).json({ error: error.response?.data });
   }
 };
 
@@ -160,7 +160,7 @@ const webhook = async (req, res) => {
   try {
     msg = wh.verify(payload, headers);
   } catch (err) {
-    res.status(400).json({});
+      return res.status(400).json({});
   }
   console.log(msg);
   // Do something with the message...

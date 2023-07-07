@@ -142,7 +142,7 @@ const useCurrencies = () => {
       const foundData = data.find((source) => source.name === filterBy);
       if (foundData) {
         foundData.networks.forEach((network) => {
-          network.currencies.findIndex((currency) => {
+          network.currencies.forEach((currency) => {
             if (
               currencies.findIndex((item) => item.name === currency.name) === -1
             ) {
