@@ -1,6 +1,6 @@
 import axios from "axios";
 import { prodHost, apiKey, webhookSecret } from "../env.dev.js";
-import { Swaps } from "../model.js";
+import { Swaps } from "./model.js";
 import { Webhook } from "svix";
 
 const getNetworks = async (req, res) => {
@@ -143,8 +143,8 @@ const deleteSwap = async (req, res) => {
             "X-LS-APIKEY": apiKey,
           },
         }
-       res.json(result.data);
       );
+      res.json(result.data);
     }
   } catch (error) {
     res.status(error.response.status).json({ error: error.response.data });

@@ -7,7 +7,7 @@ import {
   getSwap,
   deleteSwap,
   webhook
-} from "../controllers/controller.js";
+} from "./controller.js";
 
 const router = express.Router();
 

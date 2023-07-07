@@ -3,7 +3,7 @@ import helmet from "helmet";
 import cors from "cors";
 
 import { allowedOrigin, port } from "./env.dev.js";
-import router from "./routes/routes.js";
+import router from "./src/routes.js";
 
 const app = express();
 
