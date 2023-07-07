@@ -123,7 +123,9 @@ export default function App() {
                     variant="contained"
                     color="primary"
                     size="small"
-                    onClick={() => { navigate('/swaps')}}
+                    onClick={() => {
+                      navigate("/swaps");
+                    }}
                   >
                     Swaps List
                   </Button>
