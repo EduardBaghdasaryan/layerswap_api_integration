@@ -136,14 +136,11 @@ const deleteSwap = async (req, res) => {
       },
     });
     if (response.data.data) {
-      const result = await axios.get(
-        `${prodHost}/api/private/swaps/${response.data.data.id}`,
-        {
-          headers: {
-            "X-LS-APIKEY": apiKey,
-          },
-        }
-      );
+      const result = await axios.get(`${prodHost}/api/private/swaps/${id})`, {
+        headers: {
+          "X-LS-APIKEY": apiKey,
+        },
+      });
       res.json(result.data);
     }
   } catch (error) {
@@ -154,15 +151,13 @@ const deleteSwap = async (req, res) => {
 const webhook = async (req, res) => {
   const payload = req.body;
   const headers = req.headers;
-  console.log(payload);
   const wh = new Webhook(webhookSecret);
   let msg;
   try {
     msg = wh.verify(payload, headers);
   } catch (err) {
-      return res.status(400).json({});
+    return res.status(400).json({});
   }
-  console.log(msg);
   // Do something with the message...
 
   res.json({});

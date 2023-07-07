@@ -1,4 +1,4 @@
-import { useGetSwap } from "./hooks";
+import { useGetSwap, useCancelSwap } from "./hooks";
 import { Grid, Avatar, Typography, Paper, Button } from "@mui/material";
 import { useState } from "react";
 import { css } from "@emotion/react";
@@ -22,6 +22,7 @@ const classes = {
 
 export default function Swap() {
   const { swap } = useGetSwap();
+  const { cancelSwap } = useCancelSwap();
 
   const [jsonDisplay, setJsonDisplay] = useState(false);
   const [jsonData, setJsonData] = useState(null);
@@ -34,6 +35,10 @@ export default function Swap() {
       setJsonDisplay(true);
       setJsonData(JSON.stringify(swap, null, 2));
     }
+  };
+
+  const getCancelSwap = () => {
+    cancelSwap();
   };
 
   return (
@@ -99,22 +104,37 @@ export default function Swap() {
                 App Name: {swap.app_name}
               </Typography>
             </Paper>
+            <Grid item>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                type="submit"
+                onClick={showJSON}
+              >
+                Show JSON
+              </Button>
+            </Grid>
+            <Grid item>
+              {jsonDisplay && (
+                <Paper className={classes.root}>
+                  <Typography variant="body1">
+                    <pre>{jsonData}</pre>
+                  </Typography>
+                </Paper>
+              )}{" "}
+            </Grid>
+          </Grid>
+          <Grid item>
             <Button
               fullWidth
               variant="contained"
               color="primary"
               type="submit"
-              onClick={showJSON}
+              onClick={getCancelSwap}
             >
-              Show JSON
+              Cancel swap
             </Button>
-            {jsonDisplay && (
-              <Paper className={classes.root}>
-                <Typography variant="body1">
-                  <pre>{jsonData}</pre>
-                </Typography>
-              </Paper>
-            )}
           </Grid>
         </Grid>
       )}

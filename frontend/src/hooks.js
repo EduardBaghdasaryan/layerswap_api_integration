@@ -116,6 +116,7 @@ const useSwaps = () => {
 
   return {
     swaps,
+    setSwaps,
   };
 };
 
@@ -161,4 +162,32 @@ const useCurrencies = () => {
   };
 };
 
-export { useNetworks, useQuote, useCreateSwap, useCurrencies, useGetSwap, useSwaps };
+const useCancelSwap = () => {
+  const { id } = useParams();
+  const cancelSwap = async () => {
+    try {
+      const { data: response } = await axios.delete(`${API_URL}/swaps/${id}`);
+      if (response.error) {
+        console.log("error delleting swap by id", response.error);
+      } else {
+        console.log(response.data);
+        return response.data;
+      }
+    } catch (error) {
+      console.log("error delleting swap by id", error);
+    }
+  };
+  return {
+    cancelSwap,
+  };
+};
+
+export {
+  useNetworks,
+  useQuote,
+  useCreateSwap,
+  useCurrencies,
+  useGetSwap,
+  useSwaps,
+  useCancelSwap,
+};
