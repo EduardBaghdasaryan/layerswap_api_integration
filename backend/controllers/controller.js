@@ -123,7 +123,7 @@ const getSwap = async (req, res) => {
     });
     res.json(response.data);
   } catch (error) {
-    res.status(error.response.status).json({ error: error.response.data });
+    res.status(500).json({ error: error.response?.data });
   }
 };
 
