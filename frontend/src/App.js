@@ -101,10 +101,8 @@ export default function App() {
       destinationAddress: address,
       asset: currency,
       refuel: false,
-      referenceId: "145145",
     });
     navigate(`/swaps/${id}`);
-    console.log("Form submitted!");
   };
   return (
     <>
@@ -119,6 +117,18 @@ export default function App() {
         <Grid item xs={3}>
           <form onSubmit={handleSubmit}>
             <Grid container direction={"column"} spacing={2}>
+              <Grid item>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => { navigate('/swaps')}}
+                  >
+                    Swaps List
+                  </Button>
+                </div>
+              </Grid>
               <Grid item>
                 <FormControl fullWidth>
                   <InputLabel id="source-label">Source</InputLabel>
