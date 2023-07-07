@@ -1,25 +1,24 @@
 import { useGetSwap } from "./hooks";
-import { makeStyles } from "@material-ui/core/styles";
-import { Typography, Paper, Avatar } from "@material-ui/core";
-import { Grid, Button } from "@mui/material";
+import { Grid, Avatar, Typography, Paper, Button } from "@mui/material";
 import { useState } from "react";
+import { css } from "@emotion/react";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: theme.spacing(2),
-  },
-  logo: {
-    width: 80,
-    height: 80,
-    marginBottom: theme.spacing(2),
-  },
-  subtitle: {
-    marginBottom: theme.spacing(1),
-  },
-}));
+const classes = {
+  root: css`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+  `,
+  logo: css`
+    width: 80px;
+    height: 80px;
+    margin-bottom: 8px;
+  `,
+  subtitle: css`
+    margin-bottom: 5px;
+  `,
+};
 
 export default function Swap() {
   const { swap } = useGetSwap();
@@ -37,7 +36,6 @@ export default function Swap() {
     }
   };
 
-  const classes = useStyles();
   return (
     <>
       {swap.id && (
@@ -98,7 +96,7 @@ export default function Swap() {
                 Reference ID: {swap.reference_id}
               </Typography>
               <Typography variant="subtitle1" className={classes.subtitle}>
-                App Name: {swap.sapp_name}
+                App Name: {swap.app_name}
               </Typography>
             </Paper>
             <Button

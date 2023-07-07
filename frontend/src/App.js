@@ -98,13 +98,12 @@ export default function App() {
       source,
       destination,
       amount: +amount,
-      sourceAddress: address,
-      destinationAddress: "0xe688b84b23f322a994A53dbF8E15FA82CDB71127",
+      destinationAddress: address,
       asset: currency,
       refuel: false,
       referenceId: "145145",
     });
-    navigate(`/${id}`);
+    navigate(`/swaps/${id}`);
     console.log("Form submitted!");
   };
   return (
