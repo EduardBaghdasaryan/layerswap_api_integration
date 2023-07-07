@@ -9,6 +9,4 @@ const Swaps = sequelize.define("Swaps", {
   swapId: DataTypes.STRING,
 });
 
-await sequelize.sync();
-
-export { Swaps };
+export { sequelize, Swaps };
