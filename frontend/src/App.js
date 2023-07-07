@@ -172,7 +172,6 @@ export default function App() {
                   label="Amount"
                   value={amount}
                   onChange={handleAmountChange}
-                  placeholder={quote?.min_amount + "-" + quote?.max_amount}
                 />
                 <Select
                   id="currency-select"
