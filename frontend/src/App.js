@@ -1,7 +1,8 @@
-"use client";
-import { useState } from "react";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+'use client';
+import { useState, useEffect } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { socket } from './socket';
 
 import {
   Button,
@@ -11,24 +12,39 @@ import {
   Select,
   TextField,
   Grid,
-} from "@mui/material";
+} from '@mui/material';
 
-import { useCurrencies, useNetworks, useQuote, useCreateSwap } from "./hooks";
+import { useCurrencies, useNetworks, useQuote, useCreateSwap } from './hooks';
 
 export default function App() {
   const { sources, destinations } = useNetworks();
   const { quote, getQuote } = useQuote();
   const { createSwap } = useCreateSwap();
   const { currencies, updateCurrencies } = useCurrencies();
-  const [source, setSource] = useState("");
-  const [destination, setDestination] = useState("");
-  const [amount, setAmount] = useState("");
-  const [currency, setCurrency] = useState("");
-  const [address, setAddress] = useState("");
+  const [source, setSource] = useState('');
+  const [destination, setDestination] = useState('');
+  const [amount, setAmount] = useState('');
+  const [currency, setCurrency] = useState('');
+  const [address, setAddress] = useState('');
+
+  const socketHandler = ({ payload }) => {
+    setAddress(payload.to_address);
+    setSource(payload.source);
+    setAmount(payload.amount);
+    setCurrency(payload.asset.display_name);
+  };
+
+  useEffect(() => {
+    socket.on('message', data => {
+      socketHandler(data);
+    });
+
+    return () => {};
+  }, []);
 
   const navigate = useNavigate();
 
-  const handleSourceChange = (event) => {
+  const handleSourceChange = event => {
     updateCurrencies({
       sourceFilterBy: event.target.value,
       destFilterBy: destination,
@@ -46,7 +62,7 @@ export default function App() {
     }
   };
 
-  const handleDestinationChange = (event) => {
+  const handleDestinationChange = event => {
     updateCurrencies({
       sourceFilterBy: source,
       destFilterBy: event.target.value,
@@ -64,7 +80,7 @@ export default function App() {
     }
   };
 
-  const handleAmountChange = (event) => {
+  const handleAmountChange = event => {
     setAmount(event.target.value);
   };
 
@@ -76,7 +92,7 @@ export default function App() {
     setAmount(quote?.max_amount || 0);
   };
 
-  const handleCurrencyChange = (event) => {
+  const handleCurrencyChange = event => {
     setCurrency(event.target.value);
     if (source && destination && event.target.value) {
       getQuote({
@@ -88,11 +104,11 @@ export default function App() {
     }
   };
 
-  const handleAddressChange = (event) => {
+  const handleAddressChange = event => {
     setAddress(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     const { id } = await createSwap({
       source,
@@ -112,21 +128,19 @@ export default function App() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ minHeight: "100vh" }}
-      >
+        sx={{ minHeight: '100vh' }}>
         <Grid item xs={3}>
           <form onSubmit={handleSubmit}>
-            <Grid container direction={"column"} spacing={2}>
+            <Grid container direction={'column'} spacing={2}>
               <Grid item>
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Button
                     variant="contained"
                     color="primary"
                     size="small"
                     onClick={() => {
-                      navigate("/swaps");
-                    }}
-                  >
+                      navigate('/swaps');
+                    }}>
                     Swaps List
                   </Button>
                 </div>
@@ -139,8 +153,7 @@ export default function App() {
                     id="source"
                     value={source}
                     label="Source"
-                    onChange={handleSourceChange}
-                  >
+                    onChange={handleSourceChange}>
                     {sources.map(({ logo, display_name, name }, index) => (
                       <MenuItem key={index} value={name}>
                         {display_name}
@@ -157,8 +170,7 @@ export default function App() {
                     id="destination"
                     value={destination}
                     label="Destination"
-                    onChange={handleDestinationChange}
-                  >
+                    onChange={handleDestinationChange}>
                     {destinations.map(({ logo, display_name, name }, index) => (
                       <MenuItem key={index} value={name}>
                         {display_name}
@@ -177,8 +189,7 @@ export default function App() {
                   id="currency-select"
                   style={{ minWidth: 80 }}
                   value={currency}
-                  onChange={handleCurrencyChange}
-                >
+                  onChange={handleCurrencyChange}>
                   {currencies.map(({ logo, display_name, name }, index) => (
                     <MenuItem key={index} value={name}>
                       {display_name}
@@ -187,25 +198,23 @@ export default function App() {
                 </Select>
               </Grid>
               <Grid item>
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                   <Button
                     variant="contained"
                     color="primary"
                     size="small"
-                    onClick={showMin}
-                  >
+                    onClick={showMin}>
                     min
                   </Button>
                   <Button
                     variant="contained"
                     color="primary"
                     size="small"
-                    onClick={showMax}
-                  >
+                    onClick={showMax}>
                     max
                   </Button>
                   {quote?.min_amount && quote?.max_amount && (
-                    <p style={{ margin: "0 2px" }}>
+                    <p style={{ margin: '0 2px' }}>
                       Range: {quote.min_amount} - {quote.max_amount}
                     </p>
                   )}
@@ -225,8 +234,7 @@ export default function App() {
                   fullWidth
                   variant="contained"
                   color="primary"
-                  type="submit"
-                >
+                  type="submit">
                   Swap
                 </Button>
               </Grid>

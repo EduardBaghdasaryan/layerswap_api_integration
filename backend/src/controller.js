@@ -136,7 +136,6 @@ const deleteSwap = async (req, res) => {
       },
     });
     if (response.data) {
-      console.log(1222222222, response.data);
       const result = await axios.get(`${prodHost}/api/private/swaps/${id}`, {
         headers: {
           'X-LS-APIKEY': apiKey,
@@ -152,10 +151,12 @@ const deleteSwap = async (req, res) => {
 const webhook = async (req, res) => {
   const payload = req.body;
   const headers = req.headers;
+  const io = req.io;
   const wh = new Webhook(webhookSecret);
   let msg;
   try {
     msg = wh.verify(payload, headers);
+    io.emit('message', msg);
   } catch (err) {
     return res.status(400).json({});
   }

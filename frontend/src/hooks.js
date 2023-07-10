@@ -95,6 +95,7 @@ const useGetSwap = () => {
 
   return {
     swap,
+    setSwap,
   };
 };
 
@@ -121,7 +122,6 @@ const useSwaps = () => {
       if (response.error) {
         console.log('error delleting swap by id', response.error);
       } else {
-        console.log(response.data);
         setSwaps(response.data);
       }
     } catch (error) {
@@ -178,6 +178,8 @@ const useCurrencies = () => {
   };
 };
 
+const useWebHook = () => {};
+
 export {
   useNetworks,
   useQuote,
@@ -185,4 +187,5 @@ export {
   useCurrencies,
   useGetSwap,
   useSwaps,
+  useWebHook,
 };

@@ -1,6 +1,8 @@
-import { useCallback } from "react";
-import { useSwaps } from "./hooks";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect } from 'react';
+import { useSwaps } from './hooks';
+import { useNavigate } from 'react-router-dom';
+import { socket } from './socket';
+
 import {
   Grid,
   Table,
@@ -10,16 +12,40 @@ import {
   TableRow,
   TableCell,
   TableBody,
-} from "@mui/material";
+  CircularProgress,
+} from '@mui/material';
 
 export default function Swaps() {
-  const { swaps } = useSwaps();
+  const { swaps, setSwaps } = useSwaps();
 
   const navigate = useNavigate();
 
-  const setSelectedRow = useCallback(({ id }) => {
-    navigate(id);
-  }, [navigate]);
+  const setSelectedRow = useCallback(
+    ({ id }) => {
+      navigate(id);
+    },
+    [navigate],
+  );
+
+  const socketHandler = ({ payload }) => {
+    setSwaps(prevSwaps => {
+      return prevSwaps.map(swap => {
+        if (swap.id === payload.id) {
+          return { ...swap, ...payload };
+        }
+        return swap;
+      });
+    });
+  };
+
+  useEffect(() => {
+    socket.on('message', data => {
+      socketHandler(data);
+    });
+
+    return () => {};
+  }, []);
+  const pendingStatuses = ['is_transfer_pending', 'user_transfer_pending'];
   return (
     <>
       <Grid
@@ -28,8 +54,7 @@ export default function Swaps() {
         direction="column"
         alignItems="center"
         justifyContent="center"
-        sx={{ minHeight: "100vh" }}
-      >
+        sx={{ minHeight: '100vh' }}>
         <Grid item xs={3}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -47,15 +72,14 @@ export default function Swaps() {
               <TableBody>
                 {swaps &&
                   swaps.map(
-                    (row) =>
+                    row =>
                       row.id && (
                         <TableRow
                           onClick={() => setSelectedRow(row)}
                           key={row.id}
                           sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
+                            '&:last-child td, &:last-child th': { border: 0 },
+                          }}>
                           <TableCell component="th" scope="row">
                             {row.id}
                           </TableCell>
@@ -66,9 +90,14 @@ export default function Swaps() {
                           <TableCell align="right">
                             {row.asset.display_name}
                           </TableCell>
-                          <TableCell align="right">{row.status}</TableCell>
+                          <TableCell align="right">
+                            {row.status}
+                            {pendingStatuses.includes(row.status) && (
+                              <CircularProgress size={10} />
+                            )}
+                          </TableCell>
                         </TableRow>
-                      )
+                      ),
                   )}
               </TableBody>
             </Table>

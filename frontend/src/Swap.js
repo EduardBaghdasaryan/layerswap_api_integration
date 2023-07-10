@@ -1,6 +1,14 @@
 import { useGetSwap, useSwaps } from './hooks';
-import { Grid, Avatar, Typography, Paper, Button } from '@mui/material';
-import { useState } from 'react';
+import {
+  Grid,
+  Avatar,
+  Typography,
+  Paper,
+  Button,
+  CircularProgress,
+} from '@mui/material';
+import { useState, useEffect } from 'react';
+import { socket } from './socket';
 import { css } from '@emotion/react';
 
 const classes = {
@@ -21,11 +29,23 @@ const classes = {
 };
 
 export default function Swap() {
-  const { swap } = useGetSwap();
+  const { swap, setSwap } = useGetSwap();
   const { cancelSwap } = useSwaps();
 
   const [jsonDisplay, setJsonDisplay] = useState(false);
   const [jsonData, setJsonData] = useState(null);
+
+  const socketHandler = ({ payload }) => {
+    setSwap(payload);
+  };
+
+  useEffect(() => {
+    socket.on('message', data => {
+      socketHandler(data);
+    });
+
+    return () => {};
+  }, []);
 
   const showJSON = () => {
     if (jsonDisplay) {
@@ -40,7 +60,7 @@ export default function Swap() {
   const getCancelSwap = () => {
     cancelSwap();
   };
-
+  const pendingStatuses = ['is_transfer_pending', 'user_transfer_pending'];
   return (
     <>
       {swap.id && (
@@ -59,7 +79,10 @@ export default function Swap() {
                 src={swap.from_network.logo}
               />
               <Typography variant="subtitle1" className={classes.subtitle}>
-                Status: {swap.status}
+                Status: {swap.status}{' '}
+                {pendingStatuses.includes(swap.status) && (
+                  <CircularProgress size={10} />
+                )}
               </Typography>
               <Typography variant="h6">
                 {swap.from_network.display_name}
