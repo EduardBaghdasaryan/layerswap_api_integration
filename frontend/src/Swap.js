@@ -1,7 +1,7 @@
-import { useGetSwap, useCancelSwap } from "./hooks";
-import { Grid, Avatar, Typography, Paper, Button } from "@mui/material";
-import { useState } from "react";
-import { css } from "@emotion/react";
+import { useGetSwap, useSwaps } from './hooks';
+import { Grid, Avatar, Typography, Paper, Button } from '@mui/material';
+import { useState } from 'react';
+import { css } from '@emotion/react';
 
 const classes = {
   root: css`
@@ -22,7 +22,7 @@ const classes = {
 
 export default function Swap() {
   const { swap } = useGetSwap();
-  const { cancelSwap } = useCancelSwap();
+  const { cancelSwap } = useSwaps();
 
   const [jsonDisplay, setJsonDisplay] = useState(false);
   const [jsonData, setJsonData] = useState(null);
@@ -50,8 +50,7 @@ export default function Swap() {
           direction="column"
           alignItems="center"
           justifyContent="center"
-          sx={{ minHeight: "100vh" }}
-        >
+          sx={{ minHeight: '100vh' }}>
           <Grid item xs={3}>
             <Paper className={classes.root}>
               <Avatar
@@ -110,8 +109,7 @@ export default function Swap() {
                 variant="contained"
                 color="primary"
                 type="submit"
-                onClick={showJSON}
-              >
+                onClick={showJSON}>
                 Show JSON
               </Button>
             </Grid>
@@ -122,7 +120,7 @@ export default function Swap() {
                     <pre>{jsonData}</pre>
                   </Typography>
                 </Paper>
-              )}{" "}
+              )}{' '}
             </Grid>
           </Grid>
           <Grid item>
@@ -131,8 +129,7 @@ export default function Swap() {
               variant="contained"
               color="primary"
               type="submit"
-              onClick={getCancelSwap}
-            >
+              onClick={getCancelSwap}>
               Cancel swap
             </Button>
           </Grid>

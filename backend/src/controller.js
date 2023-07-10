@@ -1,7 +1,7 @@
-import axios from "axios";
-import { prodHost, apiKey, webhookSecret } from "../env.dev.js";
-import { Swaps } from "./model.js";
-import { Webhook } from "svix";
+import axios from 'axios';
+import { prodHost, apiKey, webhookSecret } from '../env.dev.js';
+import { Swaps } from './model.js';
+import { Webhook } from 'svix';
 
 const getNetworks = async (req, res) => {
   try {
@@ -30,10 +30,10 @@ const getQuote = async (req, res) => {
       },
       {
         headers: {
-          accept: "application/json",
-          "Content-Type": "application/json",
+          accept: 'application/json',
+          'Content-Type': 'application/json',
         },
-      }
+      },
     );
     res.json(response.data);
   } catch (error) {
@@ -67,10 +67,10 @@ const createSwap = async (req, res) => {
       },
       {
         headers: {
-          "X-LS-APIKEY": apiKey,
-          "Content-Type": "application/json",
+          'X-LS-APIKEY': apiKey,
+          'Content-Type': 'application/json',
         },
-      }
+      },
     );
     if (response.data.data) {
       await Swaps.create({
@@ -80,9 +80,9 @@ const createSwap = async (req, res) => {
         `${prodHost}/api/private/swaps/${response.data.data.swap_id}`,
         {
           headers: {
-            "X-LS-APIKEY": apiKey,
+            'X-LS-APIKEY': apiKey,
           },
-        }
+        },
       );
       res.json(result.data);
     }
@@ -94,17 +94,17 @@ const createSwap = async (req, res) => {
 const getSwaps = async (req, res) => {
   try {
     let swaps = await Swaps.findAll({
-      attributes: ["swapId"],
+      attributes: ['swapId'],
       raw: true,
     });
     const responses = await Promise.all(
       swaps.map(({ swapId }) => {
         return axios.get(`${prodHost}/api/private/swaps/${swapId}`, {
           headers: {
-            "X-LS-APIKEY": apiKey,
+            'X-LS-APIKEY': apiKey,
           },
         });
-      })
+      }),
     );
     swaps = responses.map(({ data }) => data.data || data.error);
     res.json(swaps);
@@ -118,7 +118,7 @@ const getSwap = async (req, res) => {
     const { id } = req.params;
     const response = await axios.get(`${prodHost}/api/private/swaps/${id}`, {
       headers: {
-        "X-LS-APIKEY": apiKey,
+        'X-LS-APIKEY': apiKey,
       },
     });
     res.json(response.data);
@@ -132,19 +132,20 @@ const deleteSwap = async (req, res) => {
     const { id } = req.params;
     const response = await axios.delete(`${prodHost}/api/private/swaps/${id}`, {
       headers: {
-        "X-LS-APIKEY": apiKey,
+        'X-LS-APIKEY': apiKey,
       },
     });
-    if (response.data.data) {
-      const result = await axios.get(`${prodHost}/api/private/swaps/${id})`, {
+    if (response.data) {
+      console.log(1222222222, response.data);
+      const result = await axios.get(`${prodHost}/api/private/swaps/${id}`, {
         headers: {
-          "X-LS-APIKEY": apiKey,
+          'X-LS-APIKEY': apiKey,
         },
       });
-      res.json(result.data);
+      res.json(result.data.data);
     }
   } catch (error) {
-    res.status(error.response.status).json({ error: error.response.data });
+    res.status(400).json({ error: error.response?.data });
   }
 };
 
