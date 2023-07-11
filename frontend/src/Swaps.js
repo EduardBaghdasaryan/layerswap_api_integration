@@ -27,24 +27,27 @@ export default function Swaps() {
     [navigate],
   );
 
-  const socketHandler = ({ payload }) => {
-    setSwaps(prevSwaps => {
-      return prevSwaps.map(swap => {
-        if (swap.id === payload.id) {
-          return { ...swap, ...payload };
-        }
-        return swap;
+  const socketHandler = useCallback(
+    payload => {
+      setSwaps(prevSwaps => {
+        return prevSwaps.map(swap => {
+          if (swap.id === payload.id) {
+            return { ...swap, ...payload };
+          }
+          return swap;
+        });
       });
-    });
-  };
+    },
+    [setSwaps],
+  );
 
   useEffect(() => {
-    socket.on('message', data => {
-      socketHandler(data);
-    });
+    socket.on('message', socketHandler);
 
-    return () => {};
-  }, []);
+    return () => {
+      socket.off('message', socketHandler);
+    };
+  }, [socketHandler]);
   const pendingStatuses = ['is_transfer_pending', 'user_transfer_pending'];
   return (
     <>

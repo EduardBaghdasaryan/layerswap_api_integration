@@ -7,7 +7,7 @@ import {
   Button,
   CircularProgress,
 } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { socket } from './socket';
 import { css } from '@emotion/react';
 
@@ -35,17 +35,22 @@ export default function Swap() {
   const [jsonDisplay, setJsonDisplay] = useState(false);
   const [jsonData, setJsonData] = useState(null);
 
-  const socketHandler = ({ payload }) => {
-    setSwap(payload);
-  };
+  const socketHandler = useCallback(
+    payload => {
+      setSwap(payload);
+    },
+    [setSwap],
+  );
 
   useEffect(() => {
     socket.on('message', data => {
       socketHandler(data);
     });
 
-    return () => {};
-  }, []);
+    return () => {
+      socket.off('message');
+    };
+  }, [socketHandler]);
 
   const showJSON = () => {
     if (jsonDisplay) {
@@ -72,13 +77,13 @@ export default function Swap() {
           justifyContent="center"
           sx={{ minHeight: '100vh' }}>
           <Grid item xs={3}>
-            <Paper className={classes.root}>
+            <Paper css={classes.root}>
               <Avatar
-                className={classes.logo}
+                css={classes.logo}
                 alt={swap.from_network.display_name}
                 src={swap.from_network.logo}
               />
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" css={classes.subtitle}>
                 Status: {swap.status}{' '}
                 {pendingStatuses.includes(swap.status) && (
                   <CircularProgress size={10} />
@@ -87,42 +92,42 @@ export default function Swap() {
               <Typography variant="h6">
                 {swap.from_network.display_name}
               </Typography>
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" css={classes.subtitle}>
                 From: {swap.from}
               </Typography>
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" css={classes.subtitle}>
                 To: {swap.to}
               </Typography>
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" css={classes.subtitle}>
                 Amount: {swap.amount}
               </Typography>
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" css={classes.subtitle}>
                 Fee: {swap.fee}
               </Typography>
               <Avatar
-                className={classes.logo}
+                css={classes.logo}
                 alt={swap.to_network.display_name}
                 src={swap.to_network.logo}
               />
               <Typography variant="h6">
                 {swap.to_network.display_name}
               </Typography>
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" css={classes.subtitle}>
                 Asset: {swap.asset.name}
               </Typography>
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" css={classes.subtitle}>
                 Source Address: {swap.source_address}
               </Typography>
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" css={classes.subtitle}>
                 Destination Address: {swap.to_address}
               </Typography>
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" css={classes.subtitle}>
                 Deposit Address: {swap.deposit_address}
               </Typography>
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" css={classes.subtitle}>
                 Reference ID: {swap.reference_id}
               </Typography>
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" css={classes.subtitle}>
                 App Name: {swap.app_name}
               </Typography>
             </Paper>
@@ -138,7 +143,7 @@ export default function Swap() {
             </Grid>
             <Grid item>
               {jsonDisplay && (
-                <Paper className={classes.root}>
+                <Paper css={classes.root}>
                   <Typography variant="body1">
                     <pre>{jsonData}</pre>
                   </Typography>
