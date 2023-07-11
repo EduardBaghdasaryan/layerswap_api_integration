@@ -1,8 +1,7 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { socket } from './socket';
 
 import {
   Button,
@@ -26,21 +25,6 @@ export default function App() {
   const [amount, setAmount] = useState('');
   const [currency, setCurrency] = useState('');
   const [address, setAddress] = useState('');
-
-  const socketHandler = ({ payload }) => {
-    setAddress(payload.to_address);
-    setSource(payload.source);
-    setAmount(payload.amount);
-    setCurrency(payload.asset.display_name);
-  };
-
-  useEffect(() => {
-    socket.on('message', data => {
-      socketHandler(data);
-    });
-
-    return () => {};
-  }, []);
 
   const navigate = useNavigate();
 
