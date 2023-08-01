@@ -2,9 +2,10 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import http from 'http';
+import path from 'path';
 import { Server as SocketIOServer } from 'socket.io';
 
-import { allowedOrigin, port } from './env.dev.js';
+import { allowedOrigin, port, nodeEnv } from './env.dev.js';
 import { sequelize } from './src/model.js';
 import router from './src/routes.js';
 
@@ -39,7 +40,14 @@ app.use(
   }),
 );
 
-app.use(router);
+app.use('/api', router);
+
+if (nodeEnv === 'prod') {
+  app.use(express.static(path.resolve('../frontend/build')));
+  app.get('*', function (request, response) {
+    response.sendFile(path.resolve('../frontend/build/index.html'));
+  });
+}
 
 await sequelize.sync();
 

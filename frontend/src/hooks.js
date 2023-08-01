@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-
-const API_URL = 'http://localhost:3000';
+import { API_URL } from './constants'
 
 const useNetworks = () => {
   const [sources, setSources] = useState([]);
