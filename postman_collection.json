@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1b954d40-2919-4171-983f-7cd5fc7a4f81",
+		"_postman_id": "50bf4494-2de2-4bd2-b572-9d30ad59d9ff",
 		"name": "Layeyswap",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "3363199"
@@ -175,11 +175,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{LOCAL_HOST}}/networks",
+							"raw": "{{LOCAL_HOST}}/api/networks",
 							"host": [
 								"{{LOCAL_HOST}}"
 							],
 							"path": [
+								"api",
 								"networks"
 							]
 						}
@@ -205,11 +206,12 @@
 							"raw": "{\n  \"source\": \"SOLANA_MAINNET\",\n  \"destination\": \"ETHEREUM_MAINNET\",\n  \"asset\": \"USDT\",\n  \"refuel\": true\n}"
 						},
 						"url": {
-							"raw": "{{LOCAL_HOST}}/quote",
+							"raw": "{{LOCAL_HOST}}/api/quote",
 							"host": [
 								"{{LOCAL_HOST}}"
 							],
 							"path": [
+								"api",
 								"quote"
 							]
 						}
@@ -235,11 +237,12 @@
 							"raw": "{\n    \"source\": \"ETHEREUM_MAINNET\",\n    \"destination\": \"ZKSYNCERA_MAINNET\",\n    \"amount\": 0.01,\n    \"asset\": \"ETH\",\n    \"sourceAddress\": \"0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990\",\n    \"destinationAddress\": \"0xe688b84b23f322a994A53dbF8E15FA82CDB71127\",\n    \"refuel\": false,\n    \"referenceId\": \"145126\"\n}"
 						},
 						"url": {
-							"raw": "{{LOCAL_HOST}}/swaps",
+							"raw": "{{LOCAL_HOST}}/api/swaps",
 							"host": [
 								"{{LOCAL_HOST}}"
 							],
 							"path": [
+								"api",
 								"swaps"
 							]
 						}
@@ -257,11 +260,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{LOCAL_HOST}}/swaps/6019d056-76dd-4ea3-86e8-92a52a7ebd71",
+							"raw": "{{LOCAL_HOST}}/api/swaps/6019d056-76dd-4ea3-86e8-92a52a7ebd71",
 							"host": [
 								"{{LOCAL_HOST}}"
 							],
 							"path": [
+								"api",
 								"swaps",
 								"6019d056-76dd-4ea3-86e8-92a52a7ebd71"
 							]
@@ -275,11 +279,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{LOCAL_HOST}}/swaps",
+							"raw": "{{LOCAL_HOST}}/api/swaps",
 							"host": [
 								"{{LOCAL_HOST}}"
 							],
 							"path": [
+								"api",
 								"swaps"
 							]
 						}
@@ -297,11 +302,12 @@
 							}
 						],
 						"url": {
-							"raw": "{{LOCAL_HOST}}/swaps/6019d056-76dd-4ea3-86e8-92a52a7ebd71",
+							"raw": "{{LOCAL_HOST}}/api/swaps/6019d056-76dd-4ea3-86e8-92a52a7ebd71",
 							"host": [
 								"{{LOCAL_HOST}}"
 							],
 							"path": [
+								"api",
 								"swaps",
 								"6019d056-76dd-4ea3-86e8-92a52a7ebd71"
 							]
