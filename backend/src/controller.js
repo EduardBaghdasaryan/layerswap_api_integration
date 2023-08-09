@@ -17,7 +17,8 @@ const getNetworks = async (req, res) => {
 };
 
 const getQuote = async (req, res) => {
-  const { source, destination, asset, refuel } = req.body;
+  const { source, destination, sourceAsset, destinationAsset, refuel } =
+    req.body;
 
   try {
     const response = await axios.post(
@@ -25,7 +26,8 @@ const getQuote = async (req, res) => {
       {
         source,
         destination,
-        asset,
+        source_asset: sourceAsset,
+        destination_asset: destinationAsset,
         refuel,
       },
       {
@@ -37,6 +39,7 @@ const getQuote = async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
+    console.log(error.response.data);
     res.status(error.response.status).json({ error: error.response.data });
   }
 };

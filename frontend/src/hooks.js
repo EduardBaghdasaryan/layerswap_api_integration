@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { API_URL } from './constants'
+import { API_URL } from './constants';
 
 const useNetworks = () => {
   const [sources, setSources] = useState([]);
@@ -158,11 +158,9 @@ const useCurrencies = () => {
       const foundData = data.find(source => source.name === filterBy);
       if (foundData) {
         foundData.networks.forEach(network => {
-          network.currencies.forEach(currency => {
-            if (
-              currencies.findIndex(item => item.name === currency.name) === -1
-            ) {
-              currencies.push(currency);
+          network.assets.forEach(asset => {
+            if (currencies.findIndex(item => item.name === asset.name) === -1) {
+              currencies.push(asset);
             }
           });
         });

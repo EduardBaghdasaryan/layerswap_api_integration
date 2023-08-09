@@ -18,12 +18,14 @@ import { useCurrencies, useNetworks, useQuote, useCreateSwap } from './hooks';
 export default function App() {
   const { sources, destinations } = useNetworks();
   const { quote, getQuote } = useQuote();
-  const { createSwap } = useCreateSwap();
   const { currencies, updateCurrencies } = useCurrencies();
-  const [source, setSource] = useState('');
+  const { createSwap } = useCreateSwap();
   const [destination, setDestination] = useState('');
+  const [source, setSource] = useState('');
   const [amount, setAmount] = useState('');
-  const [currency, setCurrency] = useState('');
+  const [sourceCurrency, setSourceCurrency] = useState('');
+  const [destinationCurrency, setDestinationCurrency] = useState('');
+
   const [address, setAddress] = useState('');
 
   const navigate = useNavigate();
@@ -36,11 +38,17 @@ export default function App() {
       destinations,
     });
     setSource(event.target.value);
-    if (event.target.value && destination && currency) {
+    if (
+      event.target.value &&
+      destination &&
+      sourceCurrency &&
+      destinationCurrency
+    ) {
       getQuote({
         source: event.target.value,
         destination,
-        asset: currency,
+        sourceAsset: sourceCurrency,
+        destinationAsset: destinationCurrency,
         refuel: true,
       });
     }
@@ -54,11 +62,12 @@ export default function App() {
       destinations,
     });
     setDestination(event.target.value);
-    if (source && event.target.value && currency) {
+    if (source && event.target.value && sourceCurrency && destinationCurrency) {
       getQuote({
-        source,
-        destination: event.target.value,
-        asset: currency,
+        source: event.target.value,
+        destination,
+        sourceAsset: sourceCurrency,
+        destinationAsset: destinationCurrency,
         refuel: true,
       });
     }
@@ -76,13 +85,27 @@ export default function App() {
     setAmount(quote?.max_amount || 0);
   };
 
-  const handleCurrencyChange = event => {
-    setCurrency(event.target.value);
-    if (source && destination && event.target.value) {
+  const handleSourceCurrencyChange = event => {
+    setSourceCurrency(event.target.value);
+    if (source && destination && event.target.value && destinationCurrency) {
       getQuote({
         source,
         destination,
-        asset: event.target.value,
+        sourceAsset: event.target.value,
+        destinationAsset: destinationCurrency,
+        refuel: true,
+      });
+    }
+  };
+
+  const handleDestinationCurrencyChange = event => {
+    setDestinationCurrency(event.target.value);
+    if (source && destination && event.target.value && sourceCurrency) {
+      getQuote({
+        source,
+        destination,
+        sourceAsset: sourceCurrency,
+        destinationAsset: event.target.value,
         refuel: true,
       });
     }
@@ -99,7 +122,7 @@ export default function App() {
       destination,
       amount: +amount,
       destinationAddress: address,
-      asset: currency,
+      sourceAsset: sourceCurrency,
       refuel: false,
     });
     navigate(`/swaps/${id}`);
@@ -169,17 +192,38 @@ export default function App() {
                   value={amount}
                   onChange={handleAmountChange}
                 />
-                <Select
-                  id="currency-select"
-                  style={{ minWidth: 80 }}
-                  value={currency}
-                  onChange={handleCurrencyChange}>
-                  {currencies.map(({ logo, display_name, name }, index) => (
-                    <MenuItem key={index} value={name}>
-                      {display_name}
-                    </MenuItem>
-                  ))}
-                </Select>
+                <FormControl style={{ minWidth: 80 }}>
+                  <InputLabel id="source-select-label">
+                    Source Currency
+                  </InputLabel>
+                  <Select
+                    labelId="source-select-label"
+                    id="source-currency-select"
+                    value={sourceCurrency}
+                    onChange={handleSourceCurrencyChange}>
+                    {currencies.map(({ logo, display_name, name }, index) => (
+                      <MenuItem key={index} value={name}>
+                        {display_name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl style={{ minWidth: 80 }}>
+                  <InputLabel id="currency-select-label">
+                    Desination Currency
+                  </InputLabel>
+                  <Select
+                    labelId="destination-select-label"
+                    id="destination-currency-select"
+                    value={destinationCurrency}
+                    onChange={handleDestinationCurrencyChange}>
+                    {currencies.map(({ logo, display_name, name }, index) => (
+                      <MenuItem key={index} value={name}>
+                        {display_name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
