@@ -39,7 +39,6 @@ const getQuote = async (req, res) => {
     );
     res.json(response.data);
   } catch (error) {
-    console.log(error.response.data);
     res.status(error.response.status).json({ error: error.response.data });
   }
 };
@@ -49,7 +48,8 @@ const createSwap = async (req, res) => {
     source,
     destination,
     amount,
-    asset,
+    sourceAsset,
+    destinationAsset,
     sourceAddress,
     destinationAddress,
     refuel,
@@ -62,7 +62,8 @@ const createSwap = async (req, res) => {
         source,
         destination,
         amount,
-        asset,
+        source_asset: sourceAsset,
+        destination_asset: destinationAsset,
         source_address: sourceAddress,
         destination_address: destinationAddress,
         refuel,

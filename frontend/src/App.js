@@ -123,6 +123,7 @@ export default function App() {
       amount: +amount,
       destinationAddress: address,
       sourceAsset: sourceCurrency,
+      destinationAsset : destinationCurrency,
       refuel: false,
     });
     navigate(`/swaps/${id}`);
