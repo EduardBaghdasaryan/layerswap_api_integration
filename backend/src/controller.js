@@ -15,7 +15,6 @@ const getNetworks = async (req, res) => {
   } catch (error) {
     res.status(error.response.status).json({ error: error.response.data });
   }
-  msg;
 };
 
 const getQuote = async (req, res) => {
