@@ -154,14 +154,15 @@ const deleteSwap = async (req, res) => {
 };
 
 const webhook = async (req, res) => {
-  const payload = (await buffer(req.body)).toString();
-  console.log('payload', payload);
+  const payload = req.body;
   const headers = req.headers;
   const io = req.io;
   const wh = new Webhook(webhookSecret);
   console.log('wwwwwwhhhhhhhh', wh);
   let msg;
   try {
+    console.log('headers', headers);
+    console.log('payload', payload);
     msg = wh.verify(payload, headers);
     console.log('mmmmmmmsg', msg);
     io.emit('message', msg);
