@@ -163,10 +163,12 @@ const webhook = async (req, res) => {
   try {
     console.log('headers', headers);
     console.log('payload', payload);
-    msg = wh.verify(payload, headers);
+    // Convert to string as payload should be string or buffer
+    msg = wh.verify(JSON.stringify(payload), headers);
     console.log('mmmmmmmsg', msg);
     io.emit('message', msg);
   } catch (err) {
+    console.log('eeeeeeeeeeeeeeer', err);
     return res.status(400).json({});
   }
   res.json({});
