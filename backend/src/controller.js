@@ -2,6 +2,7 @@ import axios from 'axios';
 import { prodHost, apiKey, webhookSecret } from '../env.dev.js';
 import { Swaps } from './model.js';
 import { Webhook } from 'svix';
+import { buffer } from 'micro';
 
 const getNetworks = async (req, res) => {
   try {
@@ -14,6 +15,7 @@ const getNetworks = async (req, res) => {
   } catch (error) {
     res.status(error.response.status).json({ error: error.response.data });
   }
+  msg;
 };
 
 const getQuote = async (req, res) => {
@@ -153,19 +155,20 @@ const deleteSwap = async (req, res) => {
 };
 
 const webhook = async (req, res) => {
-  const payload = req.body;
+  const payload = (await buffer(req.body)).toString();
+  console.log('payload', payload);
   const headers = req.headers;
   const io = req.io;
   const wh = new Webhook(webhookSecret);
+  console.log('wwwwwwhhhhhhhh', wh);
   let msg;
   try {
     msg = wh.verify(payload, headers);
+    console.log('mmmmmmmsg', msg);
     io.emit('message', msg);
   } catch (err) {
     return res.status(400).json({});
   }
-  // Do something with the message...
-
   res.json({});
 };
 
