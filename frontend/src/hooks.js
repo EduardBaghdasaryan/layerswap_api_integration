@@ -121,7 +121,7 @@ const useSwaps = () => {
       if (response.error) {
         console.log('error delleting swap by id', response.error);
       } else {
-        setSwaps(response.data);
+        return response;
       }
     } catch (error) {
       console.log('error delleting swap by id', error);

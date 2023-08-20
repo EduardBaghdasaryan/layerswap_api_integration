@@ -2,6 +2,7 @@ import axios from 'axios';
 import { prodHost, apiKey, webhookSecret } from '../env.dev.js';
 import { Swaps } from './model.js';
 import { Webhook } from 'svix';
+import { buffer } from 'micro';
 
 const getNetworks = async (req, res) => {
   try {
@@ -159,13 +160,12 @@ const webhook = async (req, res) => {
   const wh = new Webhook(webhookSecret);
   let msg;
   try {
-    msg = wh.verify(payload, headers);
+    // Convert to string as payload should be string or buffer
+    msg = wh.verify(JSON.stringify(payload), headers);
     io.emit('message', msg);
   } catch (err) {
     return res.status(400).json({});
   }
-  // Do something with the message...
-
   res.json({});
 };
 

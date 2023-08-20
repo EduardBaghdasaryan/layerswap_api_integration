@@ -62,8 +62,8 @@ export default function Swap() {
     }
   };
 
-  const getCancelSwap = () => {
-    cancelSwap();
+  const getCancelSwap = async () => {
+    setSwap(await cancelSwap());
   };
   const pendingStatuses = ['is_transfer_pending', 'user_transfer_pending'];
   return (
